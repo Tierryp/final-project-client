@@ -3,7 +3,10 @@ import axios from "axios";
 
 export const LoginUser = async (user) => {
   try {
-    const response = await axiosInstance.post("/api/users/login", user);
+    const response = await axiosInstance.post(
+      "http://localhost:3001/api/users/login",
+      user
+    );
     return response.data;
   } catch (error) {
     throw error();
@@ -13,7 +16,10 @@ export const LoginUser = async (user) => {
 
 export const RegisterUser = async (user) => {
   try {
-    const response = await axiosInstance.post("/api/users/register", user);
+    const response = await axiosInstance.post(
+      "http://localhost:3001/api/users/register",
+      user
+    );
     return response.data;
   } catch (error) {
  return error.response.data
@@ -24,7 +30,9 @@ export const RegisterUser = async (user) => {
 
 export const GetCurrentUser = async () => {
   try {
-    const response = await axiosInstance.post("/api/users/get-current-user");
+    const response = await axiosInstance.get(
+      "http://localhost:3001/api/users/get-current-user"
+    );
     return response.data;
   } catch (error) {
     return error.response.data;

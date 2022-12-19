@@ -1,9 +1,13 @@
 import React , { useState, useEffect}  from 'react'
 import { toast } from 'react-hot-toast';
+import { useDispatch } from 'react-redux';
 import { Link, useNavigate } from 'react-router-dom';
 import { LoginUser } from '../../apicalls/users';
+import { HideLoader, ShowLoader } from '../../redux/loaderSlice';
 
 export default function Login() {
+  const dispatch = useDispatch()
+  
   const [user, setUser] = useState({
     email: "",
     password: "",
@@ -16,20 +20,27 @@ export default function Login() {
 
   const login = async () => {
  try {
+  dispatch(ShowLoader())
    const response = await LoginUser(user);
+  dispatch(HideLoader())
    if (response.success) {
   toast.success(response.message)
      localStorage.setItem("token", response.data);
-    navigate("/")
+    window.location.href ="/"
    } else {
   toast.error(response.message)
    }
  } catch (error) {
-   toast.error(error.message);
+      dispatch(HideLoader());
+  toast.error(error.message);
  }
   }
 
-
+useEffect(() => {
+if(localStorage.getItem("token")){
+  navigate("/")
+}
+})
   
     return (
     <div>

@@ -1,8 +1,10 @@
 import React from 'react'
-import { useState } from 'react'
+import { useState, useEffect,  } from 'react'
 import { toast } from 'react-hot-toast'
-import { Link } from 'react-router-dom'
+import { useDispatch } from 'react-redux'
+import { Link, useNavigate } from 'react-router-dom'
 import { RegisterUser } from '../../apicalls/users'
+import { HideLoader, ShowLoader } from '../../redux/loaderSlice'
 
 
 export default function Register() {
@@ -11,24 +13,32 @@ export default function Register() {
     email: "",
     password: ""
   })
-
+const dispatch = useDispatch()
+  const navigate = useNavigate()
   
 
   const register = async () => {
- try {
-const response = await RegisterUser(user)
-if (response.success) {
+    try {
+dispatch(ShowLoader())
+      const response = await RegisterUser(user)
+dispatch(HideLoader())
+      if (response.success) {
  toast.success(response.message)
 } else {
 toast.error(response.message)
 }
  } catch(error) {
-toast.error(error.message);
+dispatch(HideLoader())
+  toast.error(error.message);
  }
   }
 
 
-
+useEffect(() => {
+  if (localStorage.getItem("token")) {
+    navigate("/");
+  }
+});
 
     return (
 
