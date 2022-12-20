@@ -4,8 +4,9 @@ import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { GetAllUsers, GetCurrentUser } from "../apicalls/users";
 import { HideLoader, ShowLoader } from "../redux/loaderSlice";
-import { SetAllUsers, SetUser } from "../redux/userSlice";
+import { SetAllChats, SetAllUsers, SetUser } from "../redux/userSlice";
 import Logo from "../chat-logo.png";
+import { GetAllChats } from "../apicalls/chats";
 
 export default function ProtectedRoute({ children }) {
   const navigate = useNavigate();
@@ -18,11 +19,13 @@ export default function ProtectedRoute({ children }) {
       dispatch(ShowLoader());
       const response = await GetCurrentUser();
       const userResponse = await GetAllUsers()
+      const allChatsResponse = await GetAllChats()
       dispatch(HideLoader());
       if (response.success) {
         // Redux allows us to dispatch our state inside our components without us declaring the state.
         dispatch(SetUser(response.data));
         dispatch(SetAllUsers(userResponse.data))
+        dispatch(SetAllChats(allChatsResponse.data))
       } else {
         navigate("/login");
         return false;
