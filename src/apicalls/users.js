@@ -13,7 +13,6 @@ export const LoginUser = async (user) => {
   }
 };
 
-
 export const RegisterUser = async (user) => {
   try {
     const response = await axiosInstance.post(
@@ -22,11 +21,9 @@ export const RegisterUser = async (user) => {
     );
     return response.data;
   } catch (error) {
- return error.response.data
+    return error.response.data;
   }
 };
-
-
 
 export const GetCurrentUser = async () => {
   try {
@@ -39,3 +36,13 @@ export const GetCurrentUser = async () => {
   }
 };
 
+export const GetAllUsers = async () => {
+  try {
+    const response = await axiosInstance.get(
+      "http://localhost:3001/api/users/get-all-users"
+    );
+    return response.data;
+  } catch (error) {
+    return error.response.data;
+  }
+};

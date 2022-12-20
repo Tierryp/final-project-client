@@ -28,17 +28,16 @@ function App() {
           <Route
             path="/register"
             element={
-              <ProtectedRoute>
+            
                 <Register />
-              </ProtectedRoute>
+
             }
           />
           <Route
             path="login"
             element={
-              <ProtectedRoute>
+      
                 <Login />
-              </ProtectedRoute>
             }
           />
         </Routes>
