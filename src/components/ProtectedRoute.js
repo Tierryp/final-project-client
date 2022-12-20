@@ -65,7 +65,7 @@ export default function ProtectedRoute({ children }) {
         </div>
       </div>
       {/* Content (Pages) */}
-      <div className="p-5">{children}</div>
+      <div className="py-5">{children}</div>
     </div>
   );
 }

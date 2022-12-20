@@ -3,11 +3,15 @@ import { toast } from "react-hot-toast";
 import { useDispatch, useSelector } from "react-redux";
 import { GetMessages, SendMessage } from "../../../apicalls/messages";
 import { HideLoader, ShowLoader } from "../../../redux/loaderSlice";
-import moment from "moment"
+import moment from "moment";
+import { ClearChatMessages, GetAllChats } from "../../../apicalls/chats";
+import { SetAllChats } from "../../../redux/userSlice";
 function Chat() {
   const dispatch = useDispatch();
   const [newMessage, setNewMessage] = useState("");
-  const { selectedChat, user } = useSelector((state) => state.userReducer);
+  const { selectedChat, user, allChats } = useSelector(
+    (state) => state.userReducer
+  );
   const [messages = [], setMessages] = useState([]);
   // We use this map method because members is a objects array because while we find we need to acquire strings but with the UI we need objects.
   const recepientUser = selectedChat.members.find(
@@ -46,8 +50,35 @@ function Chat() {
     }
   };
 
+  const clearUnreadMessages = async () => {
+    try {
+      dispatch(ShowLoader());
+      const response = await ClearChatMessages(selectedChat._id);
+      dispatch(HideLoader());
+      if (response.success) {
+       // After a successful response we will map through all the chats to find the current one we have open
+        const updatedChats = allChats.map((chat) => {
+          if (chat._id === selectedChat._id) {
+        // Chat updates with new data
+            return response.data;
+          }
+          return chat;
+        });
+        console.log(updatedChats)
+        dispatch(SetAllChats(updatedChats));
+      }
+    } catch (error) {
+      dispatch(HideLoader());
+      toast.error(error.message);
+    }
+  };
+
   useEffect(() => {
     getMessages();
+    
+    if(selectedChat?.lastMessage?.sender !== user._id){
+      clearUnreadMessages()
+    }
   }, [selectedChat]);
 
   return (
@@ -64,7 +95,9 @@ function Chat() {
           )}
           {!recepientUser.profilePic && (
             <div className="bg-gray-500 rounded-full h-10 w-10 flex items-center justify-center">
-              <h1 className="uppercase text-xl font-semibold text-white "></h1>
+              <h1 className="uppercase text-xl font-semibold text-white ">
+               
+              </h1>
             </div>
           )}
 
@@ -90,8 +123,15 @@ function Chat() {
                     {" "}
                     {message.text}{" "}
                   </h1>
-                  <h1 className="text-gray-500 text-sm">{moment(message.createdAt).format("hh:mm A")}</h1>
+                  <h1 className="text-gray-500 text-sm">
+                    {moment(message.createdAt).format("hh:mm A")}
+                  </h1>
                 </div>
+                {isCurrentSender && 
+                <i className={`ri-check-double-line text-lg p-1
+                ${message.read ? "text-blue-500" : "text-gray-400"}
+                
+                `}></i>}
               </div>
             );
           })}
