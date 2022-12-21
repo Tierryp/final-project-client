@@ -2,7 +2,7 @@ import moment from "moment";
 import React from "react";
 import { toast } from "react-hot-toast";
 import { useDispatch, useSelector } from "react-redux";
-import { CreateNewChat, GetAllChats } from "../../../apicalls/chats";
+import { CreateNewChat } from "../../../apicalls/chats";
 import { HideLoader, ShowLoader } from "../../../redux/loaderSlice";
 import { SetAllChats, SetSelectedChat } from "../../../redux/userSlice";
 
@@ -56,9 +56,10 @@ function UsersChatList({ searchKey }) {
     if (searchKey === "") {
       return allChats;
     }
-      return allUsers.filter((user) => user.name.toLowerCase().includes(searchKey.toLowerCase()))
-    }
-  
+    return allUsers.filter((user) =>
+      user.name.toLowerCase().includes(searchKey.toLowerCase())
+    );
+  };
 
   const getIsSelectedChatOrNot = (userObj) => {
     if (selectedChat) {
@@ -107,15 +108,13 @@ function UsersChatList({ searchKey }) {
   return (
     <div className="flex flex-col gap-3 md-5 w-96">
       {getData().map((chatObjOrUserObj) => {
-        let userObj = chatObjOrUserObj
-        
-        
-        
-        //CHECKS IF THIS IS THE CHAT OR NOT 
-        if (chatObjOrUserObj.members){
+        let userObj = chatObjOrUserObj;
+
+        //CHECKS IF THIS IS THE CHAT OR NOT
+        if (chatObjOrUserObj.members) {
           userObj = chatObjOrUserObj.members.find(
             (mem) => mem._id !== user._id
-          )
+          );
         }
         return (
           <div
@@ -149,7 +148,7 @@ function UsersChatList({ searchKey }) {
                 <h1 className="text-gray-500 text-sm">{getLastMsg(userObj)}</h1>
               </div>
             </div>
-        
+
             <div onClick={() => createNewChat(userObj._id)}>
               {!allChats.find((chat) =>
                 chat.members.map((mem) => mem._id).includes(userObj._id)
