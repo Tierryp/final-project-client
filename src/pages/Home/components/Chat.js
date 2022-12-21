@@ -41,11 +41,16 @@ function Chat({ socket }) {
 
       if (response.success) {
         setNewMessage("");
+        const res = await GetMessages(selectedChat._id);
+         if (res.success) {
+           setMessages(res.data);
+         }
       }
     } catch (error) {
       toast.error(error.message);
     }
   };
+  
   const getMessages = async () => {
     try {
       dispatch(ShowLoader());
