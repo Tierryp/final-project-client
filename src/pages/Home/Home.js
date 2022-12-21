@@ -24,7 +24,7 @@ function Home() {
       {/*  User search */}
       <div className="w-96">
         <UserSearch searchKey={searchKey} setSearchKey={setSearchKey} />
-        <UsersChatList searchKey={searchKey} />
+        <UsersChatList searchKey={searchKey} socket = {socket} />
       </div>
       {/* Chat box */}
       {selectedChat && (

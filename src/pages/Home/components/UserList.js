@@ -1,12 +1,13 @@
 import moment from "moment";
-import React from "react";
+import React, { useEffect } from "react";
 import { toast } from "react-hot-toast";
 import { useDispatch, useSelector } from "react-redux";
+import { Socket } from "socket.io-client";
 import { CreateNewChat } from "../../../apicalls/chats";
 import { HideLoader, ShowLoader } from "../../../redux/loaderSlice";
 import { SetAllChats, SetSelectedChat } from "../../../redux/userSlice";
-
-function UsersChatList({ searchKey }) {
+import store from "../../../redux/store";
+function UsersChatList({ searchKey, socket }) {
   // Getting our reducers from  Redux
   const { allUsers, allChats, user, selectedChat } = useSelector(
     (state) => state.userReducer
@@ -50,7 +51,7 @@ function UsersChatList({ searchKey }) {
     }
   };
 
-  // Will filter through the users and chats to return requireed content only.
+  // Will filter through the users and chats to return required content only.
   const getData = () => {
     //This will give us all of our chats if the searh key end up being empty.
     if (searchKey === "") {
@@ -104,6 +105,30 @@ function UsersChatList({ searchKey }) {
       );
     }
   };
+
+  useEffect(() => {
+    socket.on("receive-message", (message) => {
+      //Checks if selected chat is not equal to the chat id  that is selected
+      const tempSelectedChat = store.getState().userReducer.selectedChat;
+      const tempAllChats = store.getState().userReducer.allChats;
+
+      //Checks if selected chat is not equal to the chat id  that is selected VVVV
+      if (tempSelectedChat?._id !== message.chat) {
+        const updatedChats = tempAllChats.map((chat) => {
+          if (chat._id === message.chat) {
+            // NEW CHAT
+            return {
+              ...chat,
+              unreadMessages: (chat.unreadMessages || 0) + 1,
+              lastMessage: message,
+            };
+          }
+          return chat;
+        });
+        dispatch(SetAllChats(updatedChats));
+      }
+    });
+  }, []);
 
   return (
     <div className="flex flex-col gap-3 md-5 w-96">
