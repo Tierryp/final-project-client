@@ -3,7 +3,7 @@ import { axiosInstance } from ".";
 export const SendMessage = async (message) => {
   try {
     const response = await axiosInstance.post(
-      "http://localhost:3001/api/messages/new-message",
+      `${process.env.REACT_APP_BACKEND_URL}/api/messages/new-message`,
       message
     );
     return response.data;
@@ -15,7 +15,7 @@ export const SendMessage = async (message) => {
 export const GetMessages = async (chatId) => {
   try {
     const response = await axiosInstance.get(
-      `http://localhost:3001/api/messages/get-all-messages/${chatId}`
+      `${process.env.REACT_APP_BACKEND_URL}/api/messages/get-all-messages/${chatId}`
     );
     return response.data;
   } catch (error) {

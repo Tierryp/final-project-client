@@ -1,10 +1,9 @@
-
 import { axiosInstance } from ".";
 
 export const GetAllChats = async () => {
   try {
     const response = await axiosInstance.get(
-      "http://localhost:3001/api/chats/get-all-chats"
+      `${process.env.REACT_APP_BACKEND_URL}/api/chats/get-all-chats`
     );
     return response.data;
   } catch (error) {
@@ -15,7 +14,7 @@ export const GetAllChats = async () => {
 export const CreateNewChat = async (members) => {
   try {
     const response = await axiosInstance.post(
-      "http://localhost:3001/api/chats/create-new-chat",
+      `${process.env.REACT_APP_BACKEND_URL}/api/chats/create-new-chat`,
       {
         members,
       }
@@ -27,17 +26,15 @@ export const CreateNewChat = async (members) => {
 };
 
 export const ClearChatMessages = async (chatId) => {
-try {
+  try {
     const response = await axiosInstance.post(
-      "http://localhost:3001/api/chats/clear-unread-messages",
+      `${process.env.REACT_APP_BACKEND_URL}/api/chats/clear-unread-messages`,
       {
         chat: chatId,
       }
     );
-    return response.data
-} catch (error) {
-    throw error
-}
-
-
-}
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};

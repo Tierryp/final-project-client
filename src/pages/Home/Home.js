@@ -4,7 +4,7 @@ import Chat from "./components/Chat";
 import UserSearch from "./components/UserSearch";
 import { useSelector } from "react-redux";
 import { io } from "socket.io-client";
-const socket = io("http://localhost:3001");
+const socket = io(`${process.env.REACT_APP_BACKEND_URL}`);
 
 function Home() {
   // Storing the socket in a variable
@@ -24,7 +24,7 @@ function Home() {
       {/*  User search */}
       <div className="w-96">
         <UserSearch searchKey={searchKey} setSearchKey={setSearchKey} />
-        <UsersChatList searchKey={searchKey} socket = {socket} />
+        <UsersChatList searchKey={searchKey} socket={socket} />
       </div>
       {/* Chat box */}
       {selectedChat && (

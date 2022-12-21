@@ -4,7 +4,7 @@ import axios from "axios";
 export const LoginUser = async (user) => {
   try {
     const response = await axiosInstance.post(
-      "http://localhost:3001/api/users/login",
+      `${process.env.REACT_APP_BACKEND_URL}/api/users/login`,
       user
     );
     return response.data;
@@ -16,7 +16,7 @@ export const LoginUser = async (user) => {
 export const RegisterUser = async (user) => {
   try {
     const response = await axiosInstance.post(
-      "http://localhost:3001/api/users/register",
+      `${process.env.REACT_APP_BACKEND_URL}/api/users/register`,
       user
     );
     return response.data;
@@ -28,7 +28,7 @@ export const RegisterUser = async (user) => {
 export const GetCurrentUser = async () => {
   try {
     const response = await axiosInstance.get(
-      "http://localhost:3001/api/users/get-current-user"
+      `${process.env.REACT_APP_BACKEND_URL}/api/users/get-current-user`
     );
     return response.data;
   } catch (error) {
@@ -39,7 +39,7 @@ export const GetCurrentUser = async () => {
 export const GetAllUsers = async () => {
   try {
     const response = await axiosInstance.get(
-      "http://localhost:3001/api/users/get-all-users"
+      `${process.env.REACT_APP_BACKEND_URL}/api/users/get-all-users`
     );
     return response.data;
   } catch (error) {
