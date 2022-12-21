@@ -154,7 +154,11 @@ function Chat({ socket }) {
                   <h1 className="text-gray-500 text-sm">
                     {moment(message.createdAt).format("hh:mm A")}
                   </h1>
-                  
+                  <h1 className="text-gray-500 text-sm">
+                    {moment(message.createdAt, "DD-MM-YYYY hh:mm:ss").locale('en').format(
+                      "hh:mm A"
+                    )}
+                  </h1>
                 </div>
                 {isCurrentSender && (
                   <i
