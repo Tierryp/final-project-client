@@ -31,7 +31,7 @@ function Chat({ socket }) {
       socket.emit("send-message", {
         ...message,
         members: selectedChat.members.map((mem) => mem._id),
-        createdAt: moment().format("DD-MM-YYYY hh:mm:ss"), // Matching db database
+        createdAt: Date.now(), // Matching db database
         read: false,
       });
 
@@ -42,16 +42,16 @@ function Chat({ socket }) {
       if (response.success) {
         setNewMessage("");
         const res = await GetMessages(selectedChat._id);
-         if (res.success) {
-          console.log("This is new message response from server:", res.data)
-           setMessages(res.data);
-         }
+        if (res.success) {
+          console.log("This is new message response from server:", res.data);
+          setMessages(res.data);
+        }
       }
     } catch (error) {
       toast.error(error.message);
     }
   };
-  
+
   const getMessages = async () => {
     try {
       dispatch(ShowLoader());
@@ -100,7 +100,7 @@ function Chat({ socket }) {
       // This is how we access our state variables in redux because socket cannot access them within it's scope.
       const tempSelectedChat = store.getState().userReducer.selectedChat;
       if (tempSelectedChat._id === message.chat) {
-        console.log("Messages as receiving:", messages)
+        console.log("Messages as receiving:", messages);
         setMessages((messages) => [...messages, message]);
       }
     });
@@ -154,11 +154,7 @@ function Chat({ socket }) {
                   <h1 className="text-gray-500 text-sm">
                     {moment(message.createdAt).format("hh:mm A")}
                   </h1>
-                  <h1 className="text-gray-500 text-sm">
-                    {moment(message.createdAt, "DD-MM-YYYY hh:mm:ss").locale('en').format(
-                      "hh:mm A"
-                    )}
-                  </h1>
+                
                 </div>
                 {isCurrentSender && (
                   <i
